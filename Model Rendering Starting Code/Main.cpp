@@ -89,10 +89,54 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+    //projection matrix
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    //clipping planes, used for both ortho and perspective
+    float clipNear = 0.1f, clipFar = 100.0f;
+
+    //orthographic view - no perspective stright field of view
+    float ortholeft = -1, orthoright = 1, orthotop = 1, orthobottom = -1;
+    //glOrtho(ortholeft, orthoright, orthobottom, orthotop, clipNear, clipFar);
+
+    //perspective view different view based on camera with wider fov
+    float fov = 90, aspectRatio = windowWidth / windowHeight;
+    gluPerspective(fov, aspectRatio, clipNear, clipFar);
+
+    //view and model matrices combined
+
+    //set up matrix to be edited
+    glMatrixMode(GL_MODELVIEW);
+
     // Reset the matrix
     glLoadIdentity();
 
+    //View Transofrms
+    float camerax = 0, cameray = 0, cameraz = -1;
+    float lookx = 0, looky = 0, lookz = 0;
+    float upx = 0, upy = 1, upz = 0;
+    gluLookAt(camerax, cameray, cameraz
+        , lookx, looky, lookz
+        , upx, upy, upz);
 
+
+
+
+    //MODEL TRANSFORMS
+
+    //Translate to set loaction
+    glTranslatef(0.0f, 0.0f, 0.0f);
+    
+    //rotate to correct angles
+    glRotatef(rotate_y, 0.0f, 1.0, 0.0f); //yaw y axis
+    glRotatef(rotate_x, 1.0f, 0.0f, 0.0f); //pitch x axis
+    glRotatef(0, 0.0f, 0.0f, 1.0f); //roll z axis
+    
+    //scale to desired dimensions
+
+    glScalef(1.0f,1.0f, 1.0f);
 
     // MODEL - draw the cube
     drawCube();
